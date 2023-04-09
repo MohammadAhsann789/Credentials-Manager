@@ -202,8 +202,8 @@ namespace CredentialsManager
         private void AddItem_Btn_Click(object sender, EventArgs e)
         {
             fetchData = new FetchData();
-            int currentMaxReferenceKey = fetchData.GetNextReferenceKey();
-            if (currentMaxReferenceKey == -1)
+            int referrenceKey = fetchData.GetNextReferenceKey();
+            if (referrenceKey == -1)
             {
                 MessageBox.Show("Internal Error while inserting the Data!!!\n" +
                     "Please Contact to your Service Provider.", "Error!",
@@ -225,7 +225,7 @@ namespace CredentialsManager
 
 
             string query = "";
-
+            referrenceKey++;
             foreach (Control control in Attributes_Panel.Controls)
             {
                 if (control is TextBox)
@@ -243,8 +243,8 @@ namespace CredentialsManager
                         query += "INSERT INTO AttributeValues (UserID, CategoryID, TypeID," +
                             "ReferenceKey, AttributeValue) " +
                             "VALUES ('"+userID+"', '"+categoryID+"', '"+(int)control.Tag+"'," +
-                            "'"+currentMaxReferenceKey + 1+"', '"+control.Text.Trim()+"');";
-
+                            "'"+ referrenceKey +"', '"+control.Text.Trim()+"');";
+                        
                     }
                 }
             }
@@ -252,7 +252,14 @@ namespace CredentialsManager
             InsertData insertData = new InsertData();
             if (insertData.Insert(query))
             {
-                MessageBox.Show("Data Entered Sucessfully!!!", "Success!",
+                foreach (Control control in Attributes_Panel.Controls)
+                {
+                    if (control is TextBox)
+                    {
+                        control.Text = "";
+                    }
+                }
+                MessageBox.Show("Data Saved Sucessfully!!!", "Success!",
                     MessageBoxButtons.OK, MessageBoxIcon.Asterisk,
                     MessageBoxDefaultButton.Button1,
                     MessageBoxOptions.RightAlign);

@@ -193,6 +193,16 @@ namespace CredentialsManager.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap hide_35px {
+            get {
+                object obj = ResourceManager.GetObject("hide_35px", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap lock_Highlighted_35px {
             get {
                 object obj = ResourceManager.GetObject("lock_Highlighted_35px", resourceCulture);

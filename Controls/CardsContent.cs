@@ -21,7 +21,7 @@ namespace CredentialsManager.Controls
         int userID;
         DataTable referenceKeys = new DataTable();
         DataTable attributeValues = new DataTable();
-        List<List<string>> attributeTypes = new List<List<string>>();
+        // List<List<string>> attributeTypes = new List<List<string>>();
 
         public CardsContent(Image cardLogoImage, int categoryID, int userID)
         {
@@ -29,7 +29,7 @@ namespace CredentialsManager.Controls
             this.categoryID = categoryID;
             this.userID = userID;
             Cards_FlowLayoutPanel.Controls.Clear();
-            GetCards(cardLogoImage); 
+            GetCards(cardLogoImage);
         }
 
         private void GetCards(Image cardLogoImage)

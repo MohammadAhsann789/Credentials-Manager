@@ -172,7 +172,8 @@ namespace CredentialsManager.Controls
                 "Manage your Mail Accounts");
 
             Mails_Btn.Tag = GetCategoryID(Mails_Btn.Text);
-            Add_Control(new CardsContent(Properties.Resources.mail_account_35px, (int)Mails_Btn.Tag, userID));
+            Add_Control(new CardsContent(Properties.Resources.mail_account_35px,
+                (int)Mails_Btn.Tag, userID));
         }
 
         private void Credentials_Btn_Click(object sender, EventArgs e)
@@ -184,7 +185,8 @@ namespace CredentialsManager.Controls
               "Manage your Crdentials");
 
             int categoryID = GetCategoryID(Credentials_Btn.Text);
-            Add_Control(new CardsContent(Properties.Resources.Card_Security_35px, categoryID, userID));
+            Add_Control(new CardsContent(Properties.Resources.Card_Security_35px,
+                categoryID, userID));
         }
 
         private void Categories_Btn_Click(object sender, EventArgs e)

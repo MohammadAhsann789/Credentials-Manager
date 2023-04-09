@@ -36,10 +36,10 @@ namespace CredentialsManager.Controls
             this.attributeNames = attributeNames;
             this.attributeValues = attributeValues;
             this.hidedAttributes = hidedAttributes;
-            Initialize_Card();
+            Activate_Card();
         }
 
-        private void Initialize_Card()
+        private void Activate_Card()
         {
             for(int i=0; i < 3; i++)
             {
@@ -96,6 +96,7 @@ namespace CredentialsManager.Controls
             label.RightToLeft = RightToLeft.No;
             label.ForeColor = Color.Black;
             label.AutoSize = true;
+            label.RightToLeft = RightToLeft.No;
             label.Font = new Font("Segoe UI", (float)11.2, FontStyle.Regular);
             int width = TextRenderer.MeasureText(label.Text, new Font(label.Font.FontFamily, label.Font.Size, label.Font.Style)).Width;
             int height = TextRenderer.MeasureText(label.Text, new Font(label.Font.FontFamily, label.Font.Size, label.Font.Style)).Height;
@@ -142,12 +143,13 @@ namespace CredentialsManager.Controls
             copyEye_PictureBox.Tag = hiddenAttribute;
             copyEye_PictureBox.Image = Resources.eye_35px;
             copyEye_PictureBox.Location = new Point(location.X, location.Y);
-            copyEye_PictureBox.Name = attributeName;
+            copyEye_PictureBox.Name = attributeName + "_CopyEye_PictureBox";
             copyEye_PictureBox.Size = new Size(25, 20);
             copyEye_PictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
             copyEye_PictureBox.TabIndex = 14;
             copyEye_PictureBox.Visible = true;
             copyEye_PictureBox.Click += new EventHandler(CopyEye_Picturebox_Click_Event);
+            copyEye_PictureBox.DoubleClick += new EventHandler(CopyEye_Picturebox_DoubleClick_Event);
             copyEye_PictureBox.MouseLeave += new EventHandler(InfoLabel_MouseLeave);
             copyEye_PictureBox.MouseHover += new EventHandler(InfoLabel_MouseHover);
             copyEye_PictureBox.BringToFront();
@@ -170,7 +172,7 @@ namespace CredentialsManager.Controls
             }
             else if(pictureBox == copyEye_PictureBox)
             {
-                Info_Label.Text = "Copy";
+                Info_Label.Text = "Show Password";
             }
         }
 
@@ -178,11 +180,16 @@ namespace CredentialsManager.Controls
         {
             Info_Label.Visible = true;
             PictureBox pictureBox = (PictureBox)sender;
-            int offsetX = 17;
+            int offsetX = 0;
             int offsetY = -15;
-            if(pictureBox != Details_Picturebox)
+            if(pictureBox == copyEye_PictureBox)
             {
-                offsetX = -offsetX;
+                offsetX = -offsetX - 70;
+                offsetY = -offsetY - 35;
+            }
+            else
+            {
+                offsetY = -15;
             }
             Set_InfoLabelName(pictureBox);
             Info_Label.Location = new Point(pictureBox.Location.X + offsetX, pictureBox.Location.Y + offsetY);
@@ -196,7 +203,28 @@ namespace CredentialsManager.Controls
         private void CopyEye_Picturebox_Click_Event(object sender, EventArgs e)
         {
             PictureBox senderItem = (PictureBox)sender;
-            Control[] foundControls = this.Controls.Find(senderItem.Name + "_Textbox", true);
+            Control[] foundControls = this.Controls
+                .Find(senderItem.Name.Replace("_CopyEye_PictureBox", "_Textbox"), true);
+
+            TextBox passwordTextbox = (TextBox)foundControls[0];
+            passwordTextbox.UseSystemPasswordChar = !passwordTextbox.UseSystemPasswordChar;
+            
+            if (passwordTextbox.UseSystemPasswordChar)
+            {
+                senderItem.Image = Resources.eye_35px;
+            }
+            else
+            {
+                senderItem.Image = Resources.hide_35px;
+            }
+        }
+
+        private void CopyEye_Picturebox_DoubleClick_Event(object sender, EventArgs e)
+        {
+            PictureBox senderItem = (PictureBox)sender;
+            Control[] foundControls = this.Controls
+                .Find(senderItem.Name.Replace("_CopyEye_PictureBox", "_Textbox"), true);
+            
             foreach(Control control in foundControls)
             {
                 if(control is TextBox)
@@ -204,7 +232,8 @@ namespace CredentialsManager.Controls
                     TextBox passwordTextbox = (TextBox)control;
                     Clipboard.SetText(passwordTextbox.Text);
                     CopyEye_Picturebox.Focus();
-                    MessageBox.Show(senderItem.Name + " Copied!!!", "Success!",
+                    MessageBox.Show(senderItem.Name.Replace("_CopyEye_PictureBox", "")
+                        + " Copied!!!", "Success!",
                         MessageBoxButtons.OK, MessageBoxIcon.Asterisk,
                         MessageBoxDefaultButton.Button1,
                         MessageBoxOptions.RightAlign);
